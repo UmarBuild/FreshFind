@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Bookmark, MapPin, Clock, Star, ChevronRight, BadgeCheck } from 'lucide-react'
 import { useBookmarks } from '../context/BookmarkContext'
@@ -23,7 +24,7 @@ function Thumbnail({ market }) {
   const initial = market.name.charAt(0)
   return (
     <div
-      className="relative h-32 sm:h-36 overflow-hidden"
+      className="relative h-32 sm:h-40 overflow-hidden group-hover:scale-105 transition-transform duration-700 ease-out"
       style={{ background: `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)` }}
     >
       {/* Decorative shapes */}
@@ -32,8 +33,10 @@ function Thumbnail({ market }) {
         <circle cx="30" cy="85" r="25" fill="white" opacity="0.12" />
         <path d="M0,80 Q50,60 100,75 T200,70 L200,100 L0,100 Z" fill="white" opacity="0.1" />
       </svg>
+      {/* Moving shine sweep on hover */}
+      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="font-display text-5xl text-white/95 font-bold drop-shadow">{initial}</span>
+        <span className="font-display text-6xl text-white/95 font-bold drop-shadow-lg group-hover:scale-110 transition-transform duration-500">{initial}</span>
       </div>
       <div className="absolute top-2 left-2 flex flex-wrap gap-1.5">
         {market.verifiedOrganic && (
@@ -51,21 +54,23 @@ function Thumbnail({ market }) {
 }
 
 export default function MarketCard({ market, style }) {
+  const ref = useRef(null)
   const { isBookmarked, toggleBookmark } = useBookmarks()
   const saved = isBookmarked('market', market.id)
 
   return (
     <article
-      className="card-ff overflow-hidden hover:shadow-cardHover hover:-translate-y-1 group flex flex-col"
+      ref={ref}
+      className="card-ff overflow-hidden hover:shadow-cardHover hover:-translate-y-2 group flex flex-col transition-all duration-500"
       style={style}
       data-hover
     >
-      <div className="relative">
+      <div className="relative overflow-hidden">
         <Thumbnail market={market} />
         <button
           onClick={(e) => { e.preventDefault(); toggleBookmark('market', market.id) }}
-          className={`absolute top-2 right-2 inline-flex items-center justify-center w-9 h-9 rounded-full backdrop-blur-sm transition-all ${
-            saved ? 'bg-orange text-white' : 'bg-white/20 text-white hover:bg-white/40'
+          className={`absolute top-2 right-2 inline-flex items-center justify-center w-9 h-9 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 ${
+            saved ? 'bg-orange text-white' : 'bg-white/25 text-white hover:bg-white/45'
           }`}
           aria-label={saved ? 'Remove bookmark' : 'Save market'}
         >

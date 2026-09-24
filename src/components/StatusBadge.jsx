@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Clock, Users, MapPin } from 'lucide-react'
 
 /**
  * StatusBadge — determines whether a market is "Open Right Now" based on
  * the current day/time vs. the market's operating days & hours.
+ *
+ * SRS: 'Open Right Now' status badge is required. Live clock + visitor
+ * counter + geolocation are NOT in the SRS — those have been removed.
  *
  * Props: market = { days: ['Mon','Wed',...], openTime, closeTime }
  */
@@ -26,27 +28,13 @@ function computeIsOpen(market, now) {
   return { open: false, label: 'Closed today' }
 }
 
-export function useNow(intervalMs = 30000) {
+function useNow(intervalMs = 30000) {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), intervalMs)
     return () => clearInterval(id)
   }, [intervalMs])
   return now
-}
-
-export function useLiveVisitors(base = 247) {
-  const [count, setCount] = useState(base)
-  useEffect(() => {
-    const id = setInterval(() => {
-      setCount((c) => {
-        const drift = Math.floor(Math.random() * 7) - 3
-        return Math.max(180, Math.min(420, c + drift))
-      })
-    }, 4000)
-    return () => clearInterval(id)
-  }, [])
-  return count
 }
 
 export default function StatusBadge({ market, size = 'md' }) {
@@ -67,48 +55,5 @@ export default function StatusBadge({ market, size = 'md' }) {
       </span>
       {label}
     </span>
-  )
-}
-
-/** Compact status bar shown in the header — clock + visitor count + geolocation */
-export function HeaderStatusStrip() {
-  const now = useNow(1000)
-  const visitors = useLiveVisitors()
-  const [geo, setGeo] = useState(null)
-
-  const fmtTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
-  const fmtDate = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-
-  const handleGeo = () => {
-    if (!navigator.geolocation) return
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setGeo({ lat: pos.coords.latitude.toFixed(3), lng: pos.coords.longitude.toFixed(3) })
-      },
-      () => setGeo(null),
-      { enableHighAccuracy: false, timeout: 5000 }
-    )
-  }
-
-  return (
-    <div className="flex items-center gap-3 text-[11px] font-medium">
-      <span className="hidden sm:inline-flex items-center gap-1.5 text-charcoal/70">
-        <Clock className="w-3 h-3 text-orange" />
-        <span suppressHydrationWarning>{fmtDate}</span>
-        <span className="tabular-nums text-emerald font-semibold" suppressHydrationWarning>{fmtTime}</span>
-      </span>
-      <span className="hidden md:inline-flex items-center gap-1.5 text-charcoal/70">
-        <Users className="w-3 h-3 text-orange" />
-        <span className="tabular-nums">{visitors.toLocaleString()} online</span>
-      </span>
-      <button
-        onClick={handleGeo}
-        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald/10 text-emerald hover:bg-emerald hover:text-white transition-colors"
-        title="Find markets near me"
-      >
-        <MapPin className="w-3 h-3" />
-        <span className="hidden lg:inline">{geo ? `${geo.lat}, ${geo.lng}` : 'Near me'}</span>
-      </button>
-    </div>
   )
 }

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Sprout, Menu, X, ChevronRight, Home as HomeIcon, Store, Apple, Mail, Info } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { HeaderStatusStrip } from './StatusBadge'
 
 const NAV = [
   { to: '/', label: 'Home', icon: HomeIcon },
@@ -58,7 +57,7 @@ export default function Header() {
         <div className="flex items-center justify-between py-3">
           {/* Logo */}
           <Link to="/" className="group flex items-center gap-2.5" data-hover>
-            <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl gradient-emerald text-white shadow-card">
+            <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl gradient-emerald text-white shadow-card transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
               <Sprout className="w-5 h-5" />
               <span className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-orange border-2 border-oatmeal" />
             </span>
@@ -89,11 +88,8 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Right cluster */}
+          {/* Right cluster — auth only, no extra widgets */}
           <div className="flex items-center gap-3">
-            <div className="hidden xl:block">
-              <HeaderStatusStrip />
-            </div>
             {user ? (
               <div className="hidden md:flex items-center gap-2">
                 <span className="text-xs text-charcoal/70">Hi, <span className="text-emerald font-semibold">{user.name}</span></span>
@@ -122,7 +118,6 @@ export default function Header() {
       <div className={`lg:hidden overflow-hidden transition-all duration-400 ${mobileOpen ? 'max-h-[640px] opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="container-ff pb-4">
           <div className="glass rounded-2xl p-4 shadow-card space-y-2">
-            <div className="pb-2"><HeaderStatusStrip /></div>
             {NAV.map(({ to, label, icon: Icon }) => (
               <NavLink
                 key={to}

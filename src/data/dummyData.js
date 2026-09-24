@@ -11,7 +11,6 @@ export const APP_META = {
   tagline: 'Discover Farmers Markets & Seasonal Produce',
   version: '1.0.0',
   championship: 'TechWiz 7 — Web Innovation Unleashed',
-  liveVisitorsBase: 247,
   totalMarkets: 18,
   organicFarms: 142,
   totalProduce: 60,

@@ -18,11 +18,15 @@ export default function ProduceModal({ produceId, onClose }) {
 
     const tl = gsap.timeline()
     tl.fromTo(rootRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 })
-      .fromTo(panelRef.current, { y: 30, scale: 0.95, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.3)' }, '-=0.1')
+      .fromTo(panelRef.current,
+        { y: 60, scale: 0.85, opacity: 0, rotateX: -15 },
+        { y: 0, scale: 1, opacity: 1, rotateX: 0, duration: 0.7, ease: 'back.out(1.5)' },
+        '-=0.1'
+      )
       .fromTo(panelRef.current.querySelectorAll('[data-modal-stagger]'),
-        { y: 16, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, stagger: 0.06, ease: 'power2.out' },
-        '-=0.25'
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: 'power3.out' },
+        '-=0.3'
       )
 
     return () => {
