@@ -1,0 +1,112 @@
+import { Link } from 'react-router-dom'
+import { Bookmark, MapPin, Clock, Star, ChevronRight, BadgeCheck } from 'lucide-react'
+import { useBookmarks } from '../context/BookmarkContext'
+import StatusBadge from './StatusBadge'
+
+// Inline SVG "thumbnail" — uses area name to vary the palette
+function Thumbnail({ market }) {
+  const palettes = {
+    riverside: ['#064E3B', '#0A6B52'],
+    riverside2: ['#0A6B52', '#064E3B'],
+    hillcrest: ['#EA580C', '#FB923C'],
+    greenfield: ['#064E3B', '#0A6B52'],
+    greenfield2: ['#0A6B52', '#064E3B'],
+    oldtown: ['#C2410C', '#EA580C'],
+    marina: ['#0A6B52', '#064E3B'],
+    sunset: ['#EA580C', '#C2410C'],
+    northgate: ['#053E2F', '#0A6B52'],
+    lakeside: ['#064E3B', '#0A6B52'],
+    brookhaven: ['#0A6B52', '#064E3B'],
+    maplegrove: ['#C2410C', '#EA580C'],
+  }
+  const [c1, c2] = palettes[market.thumbnail] || ['#064E3B', '#0A6B52']
+  const initial = market.name.charAt(0)
+  return (
+    <div
+      className="relative h-32 sm:h-36 overflow-hidden"
+      style={{ background: `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)` }}
+    >
+      {/* Decorative shapes */}
+      <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 200 100" preserveAspectRatio="none">
+        <circle cx="160" cy="20" r="40" fill="white" opacity="0.15" />
+        <circle cx="30" cy="85" r="25" fill="white" opacity="0.12" />
+        <path d="M0,80 Q50,60 100,75 T200,70 L200,100 L0,100 Z" fill="white" opacity="0.1" />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="font-display text-5xl text-white/95 font-bold drop-shadow">{initial}</span>
+      </div>
+      <div className="absolute top-2 left-2 flex flex-wrap gap-1.5">
+        {market.verifiedOrganic && (
+          <span className="chip-ff bg-white/20 text-white backdrop-blur-sm">
+            <BadgeCheck className="w-3 h-3" /> Organic
+          </span>
+        )}
+        <StatusBadge market={market} size="sm" />
+      </div>
+      <span className="absolute bottom-2 right-2 chip-ff bg-white/15 text-white backdrop-blur-sm">
+        <Star className="w-3 h-3 fill-orange text-orange" /> {market.rating}
+      </span>
+    </div>
+  )
+}
+
+export default function MarketCard({ market, style }) {
+  const { isBookmarked, toggleBookmark } = useBookmarks()
+  const saved = isBookmarked('market', market.id)
+
+  return (
+    <article
+      className="card-ff overflow-hidden hover:shadow-cardHover hover:-translate-y-1 group flex flex-col"
+      style={style}
+      data-hover
+    >
+      <div className="relative">
+        <Thumbnail market={market} />
+        <button
+          onClick={(e) => { e.preventDefault(); toggleBookmark('market', market.id) }}
+          className={`absolute top-2 right-2 inline-flex items-center justify-center w-9 h-9 rounded-full backdrop-blur-sm transition-all ${
+            saved ? 'bg-orange text-white' : 'bg-white/20 text-white hover:bg-white/40'
+          }`}
+          aria-label={saved ? 'Remove bookmark' : 'Save market'}
+        >
+          <Bookmark className={`w-4 h-4 ${saved ? 'fill-white' : ''}`} />
+        </button>
+      </div>
+
+      <div className="p-5 flex flex-col flex-1">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="font-display font-bold text-lg text-emerald group-hover:text-orange transition-colors leading-tight">
+            {market.name}
+          </h3>
+        </div>
+        <div className="mt-1.5 flex items-center gap-3 text-xs text-charcoal/70">
+          <span className="inline-flex items-center gap-1">
+            <MapPin className="w-3 h-3 text-orange" /> {market.area}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Clock className="w-3 h-3 text-orange" /> {market.openTime}–{market.closeTime}
+          </span>
+        </div>
+        <p className="mt-3 text-sm text-charcoal/80 leading-relaxed line-clamp-2">{market.shortDesc}</p>
+
+        {/* Days badges */}
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {market.days.map((d) => (
+            <span key={d} className="chip-ff bg-emerald/8 text-emerald">{d}</span>
+          ))}
+          <span className="chip-ff bg-charcoal/8 text-charcoal/70">{market.stalls} stalls</span>
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-emerald/10 flex items-center justify-between">
+          <Link
+            to={`/market/${market.id}`}
+            className="inline-flex items-center gap-1 text-sm font-semibold text-emerald group-hover:text-orange transition-colors"
+          >
+            View details <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+          <span className="text-[10px] text-charcoal/40">Est. {market.established}</span>
+        </div>
+      </div>
+    </article>
+  )
+}
