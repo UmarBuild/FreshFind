@@ -25,20 +25,22 @@ function ShareMenu({ onClose }) {
     { label: 'WhatsApp', href: 'https://wa.me/?text=My%20FreshFind%20bookmarks' },
   ]
   return (
-    <div className="absolute right-0 bottom-12 w-44 bg-white rounded-xl shadow-cardHover p-2 z-10">
+    <div className="mt-2 bg-white rounded-xl shadow-card border border-emerald/10 p-2">
       <p className="px-2 pb-1 text-[10px] uppercase tracking-widest text-charcoal/50">Share via</p>
-      {items.map((it) => (
-        <a
-          key={it.label}
-          href={it.href}
-          target="_blank"
-          rel="noreferrer"
-          onClick={onClose}
-          className="block px-3 py-2 text-sm text-charcoal hover:bg-emerald/5 hover:text-emerald rounded-lg transition-colors"
-        >
-          {it.label}
-        </a>
-      ))}
+      <div className="grid grid-cols-2 gap-1">
+        {items.map((it) => (
+          <a
+            key={it.label}
+            href={it.href}
+            target="_blank"
+            rel="noreferrer"
+            onClick={onClose}
+            className="block px-2.5 py-2 text-xs font-medium text-charcoal hover:bg-emerald/5 hover:text-emerald rounded-lg transition-colors text-center"
+          >
+            {it.label}
+          </a>
+        ))}
+      </div>
     </div>
   )
 }
@@ -232,23 +234,17 @@ export default function BookmarkBar() {
               >
                 <Download className="w-3.5 h-3.5" /> Export
               </button>
-              <div className="relative">
-                <button
-                  onClick={() => setShareOpen((o) => !o)}
-                  className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-orange bg-orange/10 hover:bg-orange/15 rounded-xl py-2.5 px-3 transition-colors"
-                >
-                  <Share2 className="w-3.5 h-3.5" /> Share
-                </button>
-                {shareOpen && (
-                  <>
-                    <div className="fixed inset-0 z-0" onClick={() => setShareOpen(false)} />
-                    <ShareMenu onClose={() => setShareOpen(false)} />
-                  </>
-                )}
-              </div>
+              <button
+                onClick={() => setShareOpen((o) => !o)}
+                className={`flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold rounded-xl py-2.5 px-3 transition-colors ${
+                  shareOpen ? 'bg-orange text-white' : 'text-orange bg-orange/10 hover:bg-orange/15'
+                }`}
+              >
+                <Share2 className="w-3.5 h-3.5" /> {shareOpen ? 'Close' : 'Share'}
+              </button>
               <button
                 onClick={handleCopyShare}
-                className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-charcoal bg-charcoal/5 hover:bg-charcoal/10 rounded-xl py-2.5 px-3 transition-colors"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-charcoal bg-charcoal/5 hover:bg-charcoal/10 rounded-xl py-2.5 px-3 transition-colors"
               >
                 {copied ? <><CheckCircle2 className="w-3.5 h-3.5 text-emerald" /> Copied</> : 'Copy'}
               </button>
@@ -261,6 +257,8 @@ export default function BookmarkBar() {
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
+            {/* Inline share menu — expands below the buttons row, stays inside the panel */}
+            {shareOpen && <ShareMenu onClose={() => setShareOpen(false)} />}
           </div>
         )}
       </div>

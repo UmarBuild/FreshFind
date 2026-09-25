@@ -79,6 +79,7 @@ export const MARKETS = [
     rating: 4.8,
     reviewsCount: 312,
     thumbnail: 'riverside',
+    image: '/images/markets/riverside.jpg',
     shortDesc: 'A leafy riverside gathering of family growers, bakers, and beekeepers famous for stone-fruit and raw honey.',
     longDesc:
       'Set along the willow-lined banks of the Cedar River, Riverside Spring Market is a weekend institution. Sixty-plus stalls spill across the promenade each Saturday and Sunday, anchored by third-generation orchardists, raw-honey apiarists, and small-batch bakers. Live acoustic sets, a children\'s seed-planting booth, and a composting drop-off make this market a full morning out — not just a shopping trip.',
@@ -102,6 +103,7 @@ export const MARKETS = [
     rating: 4.7,
     reviewsCount: 198,
     thumbnail: 'hillcrest',
+    image: '/images/markets/hillcrest.jpg',
     shortDesc: 'Evening market under string lights with wood-fired pizza, biodynamic wines, and late-season heirlooms.',
     longDesc:
       'When the sun dips behind the Hillcrest ridge, string lights flicker on across the market square and the smell of wood-fired dough drifts through the air. The Twilight Market specialises in after-work shoppers and date-night strollers — expect biodynamic wine tastings, rotisserie chickens, and a curated row of heirloom tomatoes that would make any gardener weak at the knees.',
@@ -125,6 +127,7 @@ export const MARKETS = [
     rating: 4.9,
     reviewsCount: 521,
     thumbnail: 'greenfield',
+    image: '/images/markets/greenfield.jpg',
     shortDesc: 'The largest open-air bazaar in the valley — 80+ growers, a flower barn, and an outdoor bread oven.',
     longDesc:
       'Greenfield Harvest Bazaar is the anchor of the regional food shed. With more than eighty growers, fishmongers, and artisanal makers, it operates like a small town every Saturday. The flower barn is a destination in its own right, and the community bread oven — fired before dawn — produces loaves that sell out by nine.',
@@ -148,6 +151,7 @@ export const MARKETS = [
     rating: 4.6,
     reviewsCount: 287,
     thumbnail: 'oldtown',
+    image: '/images/markets/oldtown.jpg',
     shortDesc: 'Historic cobblestone square with heritage-breed meat, raw-milk cheese, and buskers on every corner.',
     longDesc:
       'For more than two decades, Old Town Square has been the Sunday morning ritual for families across the city. Heritage-breed pork, raw-milk cheese wheels, and buckets of daffodils share the cobbles with street musicians and a brass band. Bring a sturdy canvas tote — you\'ll leave with more than you planned.',
@@ -171,6 +175,7 @@ export const MARKETS = [
     rating: 4.5,
     reviewsCount: 142,
     thumbnail: 'marina',
+    image: '/images/markets/marina.jpg',
     shortDesc: 'Dockside market with day-boat seafood, samphire, and oysters shucked to order.',
     longDesc:
       'Where the marina meets the morning mist, Marina Bay Fresh Pier is the place for ultra-local seafood. Day-boat captains sell direct from their coolers, the oyster bar opens at seven, and you can grab a coffee while watching the harbour seals. Produce stalls cluster at the landward end with coastal-grown samphire, sea kale, and salt-tolerant herbs.',
@@ -194,6 +199,7 @@ export const MARKETS = [
     rating: 4.7,
     reviewsCount: 96,
     thumbnail: 'sunset',
+    image: '/images/markets/sunset.jpg',
     shortDesc: 'Member-run organic co-op with a strict 50-mile sourcing radius and zero-waste ethos.',
     longDesc:
       'Sunset Valley Organic Co-op is run by its members — twenty-three small farms within a fifty-mile radius. There are no middlemen, no plastic bags, and no compromise on certification. Bring your own jars for honey and oil, your own cloth bags for greens, and expect a friendly, slow-paced shopping experience.',
@@ -217,6 +223,7 @@ export const MARKETS = [
     rating: 4.3,
     reviewsCount: 64,
     thumbnail: 'northgate',
+    image: '/images/markets/northgate.jpg',
     shortDesc: 'Convenient midweek market for office workers — grab-and-go salads, bread, and fruit.',
     longDesc:
       'Northgate Weekday Market was created for the lunchtime crowd. Tucked between the office towers, twenty-four stalls rotate through grab-and-go salads, fresh-baked baguettes, and fruit baskets. The vibe is fast, friendly, and fuel-focused — perfect for a working Wednesday.',
@@ -240,6 +247,7 @@ export const MARKETS = [
     rating: 4.8,
     reviewsCount: 233,
     thumbnail: 'lakeside',
+    image: '/images/markets/lakeside.jpg',
     shortDesc: 'Lakeside spot celebrated for squash, apples, and cider-pressing demos through autumn.',
     longDesc:
       'Set on the southern shore of Lake Evelyn, this market is at its finest in October when the maple leaves turn. Apple presses run all morning, squash varieties line the boardwalk, and the kettle-corn booth fills the air with caramel. Even off-season, the lakefront setting makes this a scenic weekend stop.',
@@ -263,6 +271,7 @@ export const MARKETS = [
     rating: 4.4,
     reviewsCount: 88,
     thumbnail: 'brookhaven',
+    image: '/images/markets/brookhaven.jpg',
     shortDesc: 'Grassroots neighbourhood market with kids\' workshops and a community compost hub.',
     longDesc:
       'Brookhaven Community Market was started by a block-party committee in 2013 and has grown into a beloved Sunday fixture. The vibe is potluck rather than polished — expect neighbourhood kids running the lemonade stand, a free compost drop-off, and weekly workshops on container gardening and pickling.',
@@ -286,6 +295,7 @@ export const MARKETS = [
     rating: 4.6,
     reviewsCount: 174,
     thumbnail: 'maplegrove',
+    image: '/images/markets/maplegrove.jpg',
     shortDesc: 'Indoor winter market with storage crops, preserved goods, hot cider, and holiday wreaths.',
     longDesc:
       'When the snow starts to fly, Maple Grove Winter Market moves indoors to the historic round barn. Storage crops, jarred preserves, hot cider, and hand-tied holiday wreaths fill the stalls. It\'s the city\'s cosiest Saturday tradition — warm boots, warm drinks, and warm conversation.',
@@ -309,6 +319,7 @@ export const MARKETS = [
     rating: 4.2,
     reviewsCount: 41,
     thumbnail: 'riverside2',
+    image: '/images/markets/riverside2.jpg',
     shortDesc: 'Small midweek pop-up for the Riverside regulars who can\'t wait until Saturday.',
     longDesc:
       'A pop-up sibling to the Riverside Spring Market, this Wednesday catch-up serves the regulars who simply cannot wait until the weekend. Twenty-two stalls rotate weekly — expect greens, eggs, bread, and a soup vendor who changes his recipe with the weather.',
@@ -332,6 +343,7 @@ export const MARKETS = [
     rating: 4.4,
     reviewsCount: 52,
     thumbnail: 'greenfield2',
+    image: '/images/markets/greenfield2.jpg',
     shortDesc: 'Three-hour express market for the after-work crowd with meal kits and ready-to-cook bundles.',
     longDesc:
       'Greenfield Evening Express is a tight, three-hour market designed for the after-work crowd. Eighteen stalls, each curated around a "cook-it-tonight" theme — stir-fry bundles, pasta-night kits, taco kits, and the famous roast-chicken-and-veg box. Pre-order online and skip the queue.',
@@ -356,6 +368,7 @@ export const PRODUCE = [
   // ---------- FRUITS ----------
   {
     id: 'p-strawberries',
+    image: '/images/produce/strawberries.jpg',
     name: 'Strawberries',
     category: 'Fruits',
     seasons: ['Spring', 'Summer'],
@@ -369,6 +382,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-peaches',
+    image: '/images/produce/peaches.jpg',
     name: 'Peaches',
     category: 'Fruits',
     seasons: ['Summer'],
@@ -382,6 +396,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-apples',
+    image: '/images/produce/apples.jpg',
     name: 'Heritage Apples',
     category: 'Fruits',
     seasons: ['Autumn', 'Winter'],
@@ -395,6 +410,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-pears',
+    image: '/images/produce/pears.jpg',
     name: 'Bartlett Pears',
     category: 'Fruits',
     seasons: ['Autumn', 'Winter'],
@@ -408,6 +424,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-lemon',
+    image: '/images/produce/lemon.jpg',
     name: 'Meyer Lemons',
     category: 'Fruits',
     seasons: ['Winter'],
@@ -421,6 +438,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-avocado',
+    image: '/images/produce/avocado.jpg',
     name: 'Hass Avocados',
     category: 'Fruits',
     seasons: ['Spring', 'Summer'],
@@ -434,6 +452,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-pumpkin',
+    image: '/images/produce/pumpkin.jpg',
     name: 'Sugar Pumpkins',
     category: 'Fruits',
     seasons: ['Autumn', 'Winter'],
@@ -449,6 +468,7 @@ export const PRODUCE = [
   // ---------- VEGETABLES ----------
   {
     id: 'p-tomatoes',
+    image: '/images/produce/tomatoes.jpg',
     name: 'Heirloom Tomatoes',
     category: 'Vegetables',
     seasons: ['Summer'],
@@ -462,6 +482,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-asparagus',
+    image: '/images/produce/asparagus.jpg',
     name: 'Asparagus',
     category: 'Vegetables',
     seasons: ['Spring'],
@@ -475,6 +496,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-spinach',
+    image: '/images/produce/spinach.jpg',
     name: 'Bloomsdale Spinach',
     category: 'Vegetables',
     seasons: ['Spring', 'Autumn', 'Winter'],
@@ -488,6 +510,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-kale',
+    image: '/images/produce/kale.jpg',
     name: 'Lacinato Kale',
     category: 'Vegetables',
     seasons: ['Autumn', 'Winter'],
@@ -501,6 +524,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-carrots',
+    image: '/images/produce/carrots.jpg',
     name: 'Rainbow Carrots',
     category: 'Vegetables',
     seasons: ['Summer', 'Autumn', 'Winter'],
@@ -514,6 +538,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-zucchini',
+    image: '/images/produce/zucchini.jpg',
     name: 'Zucchini',
     category: 'Vegetables',
     seasons: ['Summer'],
@@ -527,6 +552,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-onions',
+    image: '/images/produce/onions.jpg',
     name: 'Storage Onions',
     category: 'Vegetables',
     seasons: ['Autumn', 'Winter'],
@@ -540,6 +566,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-garlic',
+    image: '/images/produce/garlic.jpg',
     name: 'Hardneck Garlic',
     category: 'Vegetables',
     seasons: ['Summer', 'Autumn', 'Winter'],
@@ -553,6 +580,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-lettuce',
+    image: '/images/produce/lettuce.jpg',
     name: 'Butter Lettuce',
     category: 'Vegetables',
     seasons: ['Spring', 'Autumn'],
@@ -568,6 +596,7 @@ export const PRODUCE = [
   // ---------- HERBS ----------
   {
     id: 'p-basil',
+    image: '/images/produce/basil.jpg',
     name: 'Genovese Basil',
     category: 'Herbs',
     seasons: ['Summer'],
@@ -581,6 +610,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-mint',
+    image: '/images/produce/mint.jpg',
     name: 'Spearmint',
     category: 'Herbs',
     seasons: ['Spring', 'Summer', 'Autumn'],
@@ -594,6 +624,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-rosemary',
+    image: '/images/produce/rosemary.jpg',
     name: 'Rosemary',
     category: 'Herbs',
     seasons: ['Spring', 'Summer', 'Autumn', 'Winter'],
@@ -607,6 +638,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-thyme',
+    image: '/images/produce/thyme.jpg',
     name: 'Thyme',
     category: 'Herbs',
     seasons: ['Spring', 'Summer', 'Autumn'],
@@ -620,6 +652,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-sage',
+    image: '/images/produce/sage.jpg',
     name: 'Sage',
     category: 'Herbs',
     seasons: ['Spring', 'Summer', 'Autumn', 'Winter'],
@@ -633,6 +666,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-chives',
+    image: '/images/produce/chives.jpg',
     name: 'Chives',
     category: 'Herbs',
     seasons: ['Spring', 'Summer'],
@@ -648,6 +682,7 @@ export const PRODUCE = [
   // ---------- DAIRY ----------
   {
     id: 'p-butter',
+    image: '/images/produce/butter.jpg',
     name: 'Cultured Butter',
     category: 'Dairy',
     seasons: ['Spring', 'Summer', 'Autumn', 'Winter'],
@@ -661,6 +696,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-cheese',
+    image: '/images/produce/cheese.jpg',
     name: 'Raw-Milk Cheese',
     category: 'Dairy',
     seasons: ['Spring', 'Summer', 'Autumn', 'Winter'],
@@ -674,6 +710,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-yogurt',
+    image: '/images/produce/yogurt.jpg',
     name: 'Greek Yogurt',
     category: 'Dairy',
     seasons: ['Spring', 'Summer', 'Autumn', 'Winter'],
@@ -687,6 +724,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-milk',
+    image: '/images/produce/milk.jpg',
     name: 'Whole Milk',
     category: 'Dairy',
     seasons: ['Spring', 'Summer', 'Autumn', 'Winter'],
@@ -700,6 +738,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-mozzarella',
+    image: '/images/produce/mozzarella.jpg',
     name: 'Fresh Mozzarella',
     category: 'Dairy',
     seasons: ['Spring', 'Summer', 'Autumn'],
@@ -713,6 +752,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-honey',
+    image: '/images/produce/honey.jpg',
     name: 'Raw Wildflower Honey',
     category: 'Dairy',
     seasons: ['Summer', 'Autumn'],
@@ -726,6 +766,7 @@ export const PRODUCE = [
   },
   {
     id: 'p-oysters',
+    image: '/images/produce/oysters.jpg',
     name: 'Fresh Oysters',
     category: 'Dairy',
     seasons: ['Autumn', 'Winter'],

@@ -120,6 +120,18 @@ function Hero() {
 
   return (
     <section ref={root} className="relative pt-32 pb-20 overflow-hidden gradient-hero">
+      {/* Hero background image with parallax + soft overlay */}
+      <div data-hero-blob className="absolute inset-0 pointer-events-none">
+        <img
+          src="/images/hero/hero-fm-panorama.jpg"
+          alt=""
+          aria-hidden
+          className="w-full h-full object-cover opacity-25"
+          onError={(e) => { e.target.style.display = 'none' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-oatmeal/70 via-oatmeal/80 to-oatmeal" />
+      </div>
+
       {/* Parallax decorative blobs */}
       <div data-hero-blob className="absolute top-24 -left-20 w-72 h-72 bg-orange/15 rounded-full blur-3xl pointer-events-none" />
       <div data-hero-blob className="absolute bottom-0 -right-20 w-96 h-96 bg-emerald/12 rounded-full blur-3xl pointer-events-none" />
@@ -295,11 +307,23 @@ function SeasonalPicks() {
               to={`/produce?p=${p.id}`}
               data-reveal
               data-hover
-              className="card-ff p-5 text-center hover:shadow-cardHover hover:-translate-y-2 transition-all group"
+              className="card-ff overflow-hidden hover:shadow-cardHover hover:-translate-y-2 transition-all duration-500 group block"
             >
-              <div className="text-5xl mb-2 group-hover:scale-125 group-hover:-rotate-6 transition-transform duration-500">{p.icon}</div>
-              <p className="font-semibold text-emerald group-hover:text-orange transition-colors text-sm leading-tight">{p.name}</p>
-              <p className="text-[10px] text-charcoal/50 mt-1">{p.category}</p>
+              <div className="relative h-24 overflow-hidden">
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  onError={(e) => { e.target.style.display = 'none' }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-emerald/70 via-emerald/20 to-transparent" />
+                <span className="absolute top-1.5 right-1.5 text-2xl drop-shadow" aria-hidden>{p.icon}</span>
+              </div>
+              <div className="p-3 text-center">
+                <p className="font-semibold text-emerald group-hover:text-orange transition-colors text-sm leading-tight">{p.name}</p>
+                <p className="text-[10px] text-charcoal/50 mt-0.5">{p.category}</p>
+              </div>
             </Link>
           ))}
         </div>

@@ -54,18 +54,21 @@ export default function ProduceModal({ produceId, onClose }) {
         ref={panelRef}
         className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-oatmeal rounded-t-3xl sm:rounded-3xl shadow-cardHover"
       >
-        {/* Header */}
-        <div className="relative h-32 gradient-emerald overflow-hidden">
-          <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 200 80" preserveAspectRatio="none">
-            <circle cx="170" cy="20" r="40" fill="white" />
-            <circle cx="30" cy="70" r="25" fill="white" />
-          </svg>
+        {/* Header — real photo with overlay */}
+        <div className="relative h-48 sm:h-56 overflow-hidden">
+          <img
+            src={produce.image}
+            alt={produce.name}
+            className="absolute inset-0 w-full h-full object-cover"
+            onError={(e) => { e.target.style.display = 'none' }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-emerald-deep via-emerald/40 to-emerald/20" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-7xl drop-shadow-lg" aria-hidden>{produce.icon}</span>
+            <span className="text-7xl drop-shadow-2xl group-hover:scale-110 transition-transform duration-500" aria-hidden>{produce.icon}</span>
           </div>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 inline-flex items-center justify-center w-9 h-9 rounded-full bg-oatmeal/20 text-oatmeal hover:bg-oatmeal/30 transition-colors"
+            className="absolute top-4 right-4 inline-flex items-center justify-center w-9 h-9 rounded-full bg-oatmeal/25 text-oatmeal hover:bg-oatmeal/40 backdrop-blur-sm transition-colors"
             aria-label="Close"
           >
             <X className="w-4 h-4" />

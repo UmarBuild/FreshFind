@@ -4,7 +4,7 @@ import { Bookmark, MapPin, Clock, Star, ChevronRight, BadgeCheck } from 'lucide-
 import { useBookmarks } from '../context/BookmarkContext'
 import StatusBadge from './StatusBadge'
 
-// Inline SVG "thumbnail" — uses area name to vary the palette
+// Real photo thumbnail with gradient overlay + shine sweep on hover
 function Thumbnail({ market }) {
   const palettes = {
     riverside: ['#064E3B', '#0A6B52'],
@@ -21,32 +21,39 @@ function Thumbnail({ market }) {
     maplegrove: ['#C2410C', '#EA580C'],
   }
   const [c1, c2] = palettes[market.thumbnail] || ['#064E3B', '#0A6B52']
-  const initial = market.name.charAt(0)
+
   return (
-    <div
-      className="relative h-32 sm:h-40 overflow-hidden group-hover:scale-105 transition-transform duration-700 ease-out"
-      style={{ background: `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)` }}
-    >
-      {/* Decorative shapes */}
-      <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 200 100" preserveAspectRatio="none">
-        <circle cx="160" cy="20" r="40" fill="white" opacity="0.15" />
-        <circle cx="30" cy="85" r="25" fill="white" opacity="0.12" />
-        <path d="M0,80 Q50,60 100,75 T200,70 L200,100 L0,100 Z" fill="white" opacity="0.1" />
-      </svg>
+    <div className="relative h-44 sm:h-48 overflow-hidden">
+      {/* Real photo */}
+      <img
+        src={market.image}
+        alt={market.name}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+        onError={(e) => { e.target.style.display = 'none' }}
+      />
+      {/* Gradient overlay — keeps palette identity + ensures text legibility */}
+      <div
+        className="absolute inset-0 opacity-70 mix-blend-multiply"
+        style={{ background: `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)` }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+
       {/* Moving shine sweep on hover */}
-      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="font-display text-6xl text-white/95 font-bold drop-shadow-lg group-hover:scale-110 transition-transform duration-500">{initial}</span>
-      </div>
-      <div className="absolute top-2 left-2 flex flex-wrap gap-1.5">
+      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+
+      {/* Top-left badges */}
+      <div className="absolute top-2.5 left-2.5 flex flex-wrap gap-1.5">
         {market.verifiedOrganic && (
-          <span className="chip-ff bg-white/20 text-white backdrop-blur-sm">
+          <span className="chip-ff bg-white/85 text-emerald backdrop-blur-sm">
             <BadgeCheck className="w-3 h-3" /> Organic
           </span>
         )}
         <StatusBadge market={market} size="sm" />
       </div>
-      <span className="absolute bottom-2 right-2 chip-ff bg-white/15 text-white backdrop-blur-sm">
+
+      {/* Bottom-right rating */}
+      <span className="absolute bottom-2.5 right-2.5 chip-ff bg-black/40 text-white backdrop-blur-sm">
         <Star className="w-3 h-3 fill-orange text-orange" /> {market.rating}
       </span>
     </div>
@@ -69,8 +76,8 @@ export default function MarketCard({ market, style }) {
         <Thumbnail market={market} />
         <button
           onClick={(e) => { e.preventDefault(); toggleBookmark('market', market.id) }}
-          className={`absolute top-2 right-2 inline-flex items-center justify-center w-9 h-9 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 ${
-            saved ? 'bg-orange text-white' : 'bg-white/25 text-white hover:bg-white/45'
+          className={`absolute top-2.5 right-2.5 inline-flex items-center justify-center w-9 h-9 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 ${
+            saved ? 'bg-orange text-white' : 'bg-white/30 text-white hover:bg-white/55'
           }`}
           aria-label={saved ? 'Remove bookmark' : 'Save market'}
         >

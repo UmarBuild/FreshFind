@@ -81,7 +81,15 @@ export default function MarketDetail() {
     <div className="pt-20 pb-16">
       {/* Hero */}
       <section ref={heroRef} className="relative overflow-hidden">
-        <div className="absolute inset-0 gradient-emerald" />
+        {/* Real photo background with emerald overlay for legibility */}
+        <img
+          src={market.image}
+          alt={market.name}
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => { e.target.style.display = 'none' }}
+        />
+        <div className="absolute inset-0 bg-emerald/85" />
+        <div className="absolute inset-0 bg-gradient-to-t from-emerald-deep/60 via-transparent to-emerald-deep/40" />
         <div data-parallax="0.4" className="absolute top-0 right-0 w-96 h-96 bg-orange/20 rounded-full blur-3xl pointer-events-none" />
         <div data-parallax="0.6" className="absolute bottom-0 -left-20 w-80 h-80 bg-emerald-soft/40 rounded-full blur-3xl pointer-events-none" />
         <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 1200 400" preserveAspectRatio="none">
@@ -255,11 +263,22 @@ export default function MarketDetail() {
                 key={p.id}
                 to={`/produce?p=${p.id}`}
                 data-hover
-                className="card-ff p-4 text-center hover:shadow-cardHover hover:-translate-y-1 transition-all group"
+                className="card-ff overflow-hidden hover:shadow-cardHover hover:-translate-y-1 transition-all duration-500 group block"
               >
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">{p.icon}</div>
-                <p className="font-semibold text-emerald group-hover:text-orange text-sm transition-colors leading-tight">{p.name}</p>
-                <p className="text-[10px] text-charcoal/50 mt-1">{p.category}</p>
+                <div className="relative h-20 overflow-hidden">
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    onError={(e) => { e.target.style.display = 'none' }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-emerald/60 to-transparent" />
+                  <span className="absolute top-1 right-1 text-xl drop-shadow" aria-hidden>{p.icon}</span>
+                </div>
+                <div className="p-2.5 text-center">
+                  <p className="font-semibold text-emerald group-hover:text-orange text-xs transition-colors leading-tight">{p.name}</p>
+                </div>
               </Link>
             ))}
           </div>
