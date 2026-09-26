@@ -114,7 +114,7 @@ export default function MarketDetail() {
                     <BadgeCheck className="w-3 h-3" /> Verified Organic
                   </span>
                 )}
-                <StatusBadge market={market} />
+                <StatusBadge market={market} variant="onImage" />
                 <span className="chip-ff bg-white/10 text-oatmeal backdrop-blur-sm">
                   <Star className="w-3 h-3 fill-orange text-orange" /> {market.rating} ({market.reviewsCount})
                 </span>

@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Sprout, Heart, Target, Recycle, Globe, TrendingUp, Leaf, Quote } from 'lucide-react'
+import { Sprout, Heart, Target, Recycle, Globe, TrendingUp, Leaf, Quote, Crown, Code, Handshake, Palette } from 'lucide-react'
 import { useGsapReveal, useGsapParallax } from '../hooks/useGsap'
 import { TEAM, SUSTAINABILITY_STATS, APP_META } from '../data/dummyData'
 
@@ -138,19 +138,19 @@ export default function About() {
             <p className="text-charcoal/70 mt-3">A small, opinionated team of food lovers, engineers, and designers.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TEAM.map((member) => (
-              <div key={member.id} data-reveal className="card-ff p-6 text-center hover:shadow-cardHover hover:-translate-y-1 transition-all group">
-                <div
-                  className="inline-flex items-center justify-center w-20 h-20 rounded-full font-display text-2xl font-bold text-white mx-auto mb-4 group-hover:scale-105 transition-transform"
-                  style={{ background: `linear-gradient(135deg, ${member.color}, ${member.color}dd)` }}
-                >
-                  {member.avatar}
+            {TEAM.map((member) => {
+              const RoleIcon = { 'Founder & CEO': Crown, 'Head of Engineering': Code, 'Director of Partnerships': Handshake, 'Lead Designer': Palette }[member.role] || Sprout
+              return (
+                <div key={member.id} data-reveal className="card-ff p-6 text-center hover:shadow-cardHover hover:-translate-y-1 transition-all group">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl gradient-emerald text-white mx-auto mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+                    <RoleIcon className="w-7 h-7" />
+                  </div>
+                  <h3 className="font-display text-lg text-emerald">{member.name}</h3>
+                  <p className="text-xs uppercase tracking-widest text-orange font-semibold mt-0.5">{member.role}</p>
+                  <p className="text-sm text-charcoal/70 mt-3 leading-relaxed">{member.bio}</p>
                 </div>
-                <h3 className="font-display text-lg text-emerald">{member.name}</h3>
-                <p className="text-xs uppercase tracking-widest text-orange font-semibold mt-0.5">{member.role}</p>
-                <p className="text-sm text-charcoal/70 mt-3 leading-relaxed">{member.bio}</p>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </section>
 

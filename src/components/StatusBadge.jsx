@@ -7,7 +7,10 @@ import { Clock, Users, MapPin, X } from 'lucide-react'
  *
  * SRS: 'Open Right Now' status badge is required.
  *
- * Props: market = { days: ['Mon','Wed',...], openTime, closeTime }
+ * Props:
+ *   - market: { days: ['Mon','Wed',...], openTime, closeTime }
+ *   - size: 'sm' | 'md'
+ *   - variant: 'light' (for light backgrounds, default) | 'onImage' (for dark image backgrounds — uses white text)
  */
 function computeIsOpen(market, now) {
   if (!market?.days?.length) return { open: false, label: 'Closed' }
@@ -50,21 +53,24 @@ export function useLiveVisitors(base = 247) {
   return count
 }
 
-export default function StatusBadge({ market, size = 'md' }) {
+export default function StatusBadge({ market, size = 'md', variant = 'light' }) {
   const now = useNow()
   const { open, label } = computeIsOpen(market, now)
 
   const sizeCls = size === 'sm' ? 'text-[10px] px-2 py-0.5' : 'text-xs px-2.5 py-1'
 
+  // Variant classes — 'onImage' uses white text + dark transparent bg for legibility on photos
+  const variantCls = variant === 'onImage'
+    ? (open ? 'bg-white/25 text-white backdrop-blur-sm' : 'bg-white/20 text-white backdrop-blur-sm')
+    : (open ? 'bg-emerald/10 text-emerald' : 'bg-charcoal/10 text-charcoal/70')
+
   return (
-    <span
-      className={`chip-ff ${sizeCls} ${open ? 'bg-emerald/10 text-emerald' : 'bg-charcoal/10 text-charcoal/70'}`}
-    >
-      <span className={`relative inline-flex h-1.5 w-1.5 ${open ? '' : 'opacity-50'}`}>
+    <span className={`chip-ff ${sizeCls} ${variantCls}`}>
+      <span className={`relative inline-flex h-1.5 w-1.5 ${open ? '' : 'opacity-70'}`}>
         {open && (
           <span className="absolute inline-flex h-full w-full rounded-full bg-emerald opacity-75 animate-pulseRing" />
         )}
-        <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${open ? 'bg-emerald' : 'bg-charcoal/60'}`} />
+        <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${open ? 'bg-emerald' : 'bg-white'}`} />
       </span>
       {label}
     </span>
@@ -76,8 +82,6 @@ export default function StatusBadge({ market, size = 'md' }) {
  *   1. Real-time clock (updates every second)
  *   2. Simulated visitor counter (live, drifts every 4s)
  *   3. Browser geolocation button (uses navigator.geolocation)
- * These three pieces are explicitly required by the SRS for the
- * "Quick Search & Real-time Status" cross-page utility.
  */
 export function HeaderStatusStrip() {
   const now = useNow(1000)
@@ -111,15 +115,15 @@ export function HeaderStatusStrip() {
   }
 
   return (
-    <div className="flex items-center gap-3 text-[11px] font-medium">
-      {/* Real-time clock — updates every second */}
-      <span className="hidden sm:inline-flex items-center gap-1.5 text-charcoal/70" suppressHydrationWarning>
-        <Clock className="w-3 h-3 text-orange" />
-        <span>{fmtDate}</span>
+    <div className="flex items-center gap-2 sm:gap-3 text-[11px] font-medium">
+      {/* Real-time clock — always visible (icon + time), date only on xl */}
+      <span className="inline-flex items-center gap-1.5 text-charcoal/70" suppressHydrationWarning>
+        <Clock className="w-3 h-3 text-orange shrink-0" />
+        <span className="hidden xl:inline">{fmtDate}</span>
         <span className="tabular-nums text-emerald font-semibold">{fmtTime}</span>
       </span>
 
-      {/* Simulated live visitor counter */}
+      {/* Simulated live visitor counter — hidden on smaller screens */}
       <span className="hidden md:inline-flex items-center gap-1.5 text-charcoal/70">
         <Users className="w-3 h-3 text-orange" />
         <span className="tabular-nums">{visitors.toLocaleString()} online</span>
@@ -128,7 +132,7 @@ export function HeaderStatusStrip() {
       {/* Browser geolocation button */}
       <button
         onClick={handleGeo}
-        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald/10 text-emerald hover:bg-emerald hover:text-white transition-colors"
+        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald/10 text-emerald hover:bg-emerald hover:text-white transition-colors shrink-0"
         title="Find markets near me"
         disabled={geoLoading}
       >

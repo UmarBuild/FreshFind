@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Bookmark, MapPin, Clock, Star, ChevronRight, BadgeCheck } from 'lucide-react'
 import { useBookmarks } from '../context/BookmarkContext'
 import StatusBadge from './StatusBadge'
@@ -43,14 +43,14 @@ function Thumbnail({ market }) {
       {/* Moving shine sweep on hover */}
       <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
-      {/* Top-left badges */}
+      {/* Top-left badges — StatusBadge now uses onImage variant (white text) */}
       <div className="absolute top-2.5 left-2.5 flex flex-wrap gap-1.5">
         {market.verifiedOrganic && (
           <span className="chip-ff bg-white/85 text-emerald backdrop-blur-sm">
             <BadgeCheck className="w-3 h-3" /> Organic
           </span>
         )}
-        <StatusBadge market={market} size="sm" />
+        <StatusBadge market={market} size="sm" variant="onImage" />
       </div>
 
       {/* Bottom-right rating */}
@@ -63,16 +63,25 @@ function Thumbnail({ market }) {
 
 export default function MarketCard({ market, style }) {
   const ref = useRef(null)
+  const navigate = useNavigate()
   const { isBookmarked, toggleBookmark } = useBookmarks()
   const saved = isBookmarked('market', market.id)
 
   // 3D mouse-follow tilt — out-of-the-box card depth
   useTilt3D(ref, { max: 8, scale: 1.02, speed: 0.5 })
 
+  // Whole card is clickable — navigates to market detail page
+  const handleCardClick = (e) => {
+    // Don't navigate if bookmark button was clicked
+    if (e.target.closest('[data-bookmark-btn]')) return
+    navigate(`/market/${market.id}`)
+  }
+
   return (
     <article
       ref={ref}
-      className="card-ff overflow-hidden hover:shadow-cardHover group flex flex-col transition-shadow duration-500 [transform-style:preserve-3d]"
+      onClick={handleCardClick}
+      className="card-ff overflow-hidden hover:shadow-cardHover group flex flex-col transition-shadow duration-500 cursor-pointer [transform-style:preserve-3d]"
       style={style}
       data-hover
       data-cursor="View"
@@ -80,8 +89,9 @@ export default function MarketCard({ market, style }) {
       <div className="relative overflow-hidden">
         <Thumbnail market={market} />
         <button
-          onClick={(e) => { e.preventDefault(); toggleBookmark('market', market.id) }}
-          className={`absolute top-2.5 right-2.5 inline-flex items-center justify-center w-9 h-9 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 ${
+          data-bookmark-btn
+          onClick={(e) => { e.stopPropagation(); toggleBookmark('market', market.id) }}
+          className={`absolute top-2.5 right-2.5 inline-flex items-center justify-center w-9 h-9 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 z-10 ${
             saved ? 'bg-orange text-white' : 'bg-white/30 text-white hover:bg-white/55'
           }`}
           aria-label={saved ? 'Remove bookmark' : 'Save market'}
@@ -115,12 +125,9 @@ export default function MarketCard({ market, style }) {
         </div>
 
         <div className="mt-4 pt-4 border-t border-emerald/10 flex items-center justify-between">
-          <Link
-            to={`/market/${market.id}`}
-            className="inline-flex items-center gap-1 text-sm font-semibold text-emerald group-hover:text-orange transition-colors"
-          >
+          <span className="inline-flex items-center gap-1 text-sm font-semibold text-emerald group-hover:text-orange transition-colors">
             View details <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </Link>
+          </span>
           <span className="text-[10px] text-charcoal/40">Est. {market.established}</span>
         </div>
       </div>

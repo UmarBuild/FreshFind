@@ -18,7 +18,7 @@ npm run build && npm run preview
 - / — Home
 - /markets — Market Directory
 - /market/:id — Market Detail
-- /produce — Produce Guide (click any card to open detail modal)
+- /produce — Produce Guide
 - /about — About
 - /contact — Contact
 
