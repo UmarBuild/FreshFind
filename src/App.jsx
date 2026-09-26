@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Chatbot from './components/Chatbot'
@@ -6,6 +6,9 @@ import BookmarkBar from './components/BookmarkBar'
 import AuthModal from './components/AuthModal'
 import CustomCursor from './components/CustomCursor'
 import ScrollToTop from './components/ScrollToTop'
+import ScrollProgress from './components/ScrollProgress'
+import LoadingScreen from './components/LoadingScreen'
+import PageTransition from './components/PageTransition'
 
 import Home from './pages/Home'
 import MarketDirectory from './pages/MarketDirectory'
@@ -30,25 +33,36 @@ function NotFound() {
   )
 }
 
+function AnimatedRoutes() {
+  const location = useLocation()
+  return (
+    <PageTransition>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Home />} />
+        <Route path="/markets" element={<MarketDirectory />} />
+        <Route path="/market/:id" element={<MarketDetail />} />
+        <Route path="/produce" element={<ProduceGuide />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/home" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </PageTransition>
+  )
+}
+
 export default function App() {
   return (
     <AuthProvider>
       <BookmarkProvider>
+        <LoadingScreen />
         <CustomCursor />
         <ScrollToTop />
+        <ScrollProgress />
         <Header />
 
         <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/markets" element={<MarketDirectory />} />
-            <Route path="/market/:id" element={<MarketDetail />} />
-            <Route path="/produce" element={<ProduceGuide />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/home" element={<Navigate to="/" replace />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AnimatedRoutes />
         </main>
 
         <Footer />

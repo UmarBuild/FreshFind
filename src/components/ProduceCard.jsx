@@ -1,4 +1,4 @@
-import { Bookmark, Calendar, ChevronRight } from 'lucide-react'
+import { Bookmark, Calendar, ChevronRight, Eye } from 'lucide-react'
 import { useBookmarks } from '../context/BookmarkContext'
 
 const SEASON_COLORS = {
@@ -12,10 +12,16 @@ export default function ProduceCard({ produce, onClick, style }) {
   const { isBookmarked, toggleBookmark } = useBookmarks()
   const saved = isBookmarked('produce', produce.id)
 
+  const handleCardClick = (e) => {
+    // Don't open modal if bookmark button was clicked
+    if (e.target.closest('[data-bookmark-btn]')) return
+    onClick?.(produce.id)
+  }
+
   return (
     <article
-      onClick={onClick}
-      className="card-ff overflow-hidden hover:shadow-cardHover hover:-translate-y-2 group cursor-pointer flex flex-col transition-all duration-500"
+      onClick={handleCardClick}
+      className="card-ff overflow-hidden hover:shadow-cardHover hover:-translate-y-1 group cursor-pointer flex flex-col transition-all duration-300"
       style={style}
       data-hover
     >
@@ -38,6 +44,7 @@ export default function ProduceCard({ produce, onClick, style }) {
           {produce.category}
         </span>
         <button
+          data-bookmark-btn
           onClick={(e) => { e.stopPropagation(); toggleBookmark('produce', produce.id) }}
           className={`absolute top-2 right-2 inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 hover:scale-110 ${
             saved ? 'bg-orange text-white' : 'bg-white/40 text-white hover:bg-white/65 backdrop-blur-sm'
@@ -53,6 +60,13 @@ export default function ProduceCard({ produce, onClick, style }) {
           <h3 className="font-display font-bold text-base text-white drop-shadow leading-tight flex-1 min-w-0">
             {produce.name}
           </h3>
+        </div>
+
+        {/* Hover overlay — "View Details" pill */}
+        <div className="absolute inset-0 flex items-center justify-center bg-emerald/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-emerald font-semibold text-xs shadow-cardHover">
+            <Eye className="w-3.5 h-3.5" /> View Details
+          </span>
         </div>
       </div>
 

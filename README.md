@@ -1,4 +1,4 @@
-# FreshFind
+# FreshFind 🌱
 
 React (Vite) + Tailwind CSS + GSAP SPA — TechWiz 7 Web Innovation Unleashed.
 
@@ -14,17 +14,12 @@ Open http://localhost:3000
 npm run build && npm run preview
 ```
 
-## Tech
-- React 18 + Vite 5
-- Tailwind CSS 3 (Midnight Harvest theme)
-- GSAP + ScrollTrigger + @gsap/react
-- React Router DOM 6
-- Lucide React
-
 ## Routes
 - / — Home
 - /markets — Market Directory
 - /market/:id — Market Detail
-- /produce — Produce Guide
+- /produce — Produce Guide (click any card to open detail modal)
 - /about — About
 - /contact — Contact
+
+Built for TechWiz 7. 🌾

@@ -5,14 +5,39 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import {
   Sprout, ArrowRight, MapPin, Calendar, Leaf, Star, Store,
-  TrendingUp, BadgeCheck, ChevronRight, Sparkles, Wheat, Carrot, Apple,
+  TrendingUp, Users, BadgeCheck, ChevronRight, Sparkles, Wheat, Carrot, Apple,
 } from 'lucide-react'
 import SearchBar from '../components/SearchBar'
 import MarketCard from '../components/MarketCard'
 import { useGsapReveal, useGsapParallax } from '../hooks/useGsap'
+import { useLiveVisitors } from '../components/StatusBadge'
 import { APP_META, MARKETS, PRODUCE } from '../data/dummyData'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
+
+/**
+ * splitChars — split a string into per-character spans for staggered reveal.
+ * Each non-space character is wrapped in an inline-block span with
+ * data-hero-char attribute, used by GSAP for the 3D rotateX stagger.
+ */
+function splitChars(text) {
+  return text.split('').map((ch, i) => (
+    <span
+      key={i}
+      data-hero-char
+      className="inline-block"
+      style={{ whiteSpace: ch === ' ' ? 'pre' : 'normal' }}
+    >
+      {ch}
+    </span>
+  ))
+}
+
+/** Live counter — uses the SRS-required useLiveVisitors hook */
+function LiveCounter({ base }) {
+  const c = useLiveVisitors(base)
+  return <span className="tabular-nums">{c.toLocaleString()}</span>
+}
 
 /* ──────────────────────────────────────────────────────────────
    HERO  — explosive GSAP entrance: title stagger + parallax bg
@@ -27,15 +52,15 @@ function Hero() {
     // Eyebrow slides + fades
     tl.from('[data-hero="eyebrow"]', { y: 30, opacity: 0, duration: 0.7 })
 
-    // Title: each line scales + rises + fades with a punchy stagger
-      .from('[data-hero="title"] > span', {
-        yPercent: 110,
-        opacity: 0,
-        rotateX: -45,
-        duration: 1,
-        stagger: 0.12,
-        ease: 'power4.out',
-      }, '-=0.2')
+    // Title: per-character stagger reveal — each char rises + rotates + fades
+    tl.from('[data-hero-char]', {
+      yPercent: 120,
+      opacity: 0,
+      rotateX: -90,
+      duration: 0.9,
+      stagger: 0.025,
+      ease: 'back.out(1.4)',
+    }, '-=0.2')
 
       // Subtitle fades + rises
       .from('[data-hero="subtitle"]', { y: 24, opacity: 0, duration: 0.7 }, '-=0.5')
@@ -150,11 +175,17 @@ function Hero() {
             {APP_META.championship}
           </span>
 
-          {/* Title with overflow-hidden masks so each line slides up cleanly */}
-          <h1 data-hero="title" className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-emerald mt-4 leading-[1.05] text-balance">
-            <span className="block overflow-hidden"><span className="block">From the soil</span></span>
-            <span className="block overflow-hidden"><span className="block text-orange">to your table</span></span>
-            <span className="block overflow-hidden"><span className="block">in under a day.</span></span>
+          {/* Title with per-character spans for staggered 3D reveal */}
+          <h1 data-hero="title" className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-emerald mt-4 leading-[1.05] text-balance [perspective:600px]">
+            <span className="block overflow-hidden">
+              {splitChars('From the soil')}
+            </span>
+            <span className="block overflow-hidden text-orange">
+              {splitChars('to your table')}
+            </span>
+            <span className="block overflow-hidden">
+              {splitChars('in under a day.')}
+            </span>
           </h1>
 
           <p data-hero="subtitle" className="mt-6 text-lg text-charcoal/80 leading-relaxed max-w-2xl">
@@ -175,16 +206,17 @@ function Hero() {
             <SearchBar variant="hero" />
           </div>
 
-          {/* Inline stats — only SRS-allowed ones */}
-          <div data-hero="stats" className="mt-10 grid grid-cols-3 gap-4 max-w-2xl">
+          {/* Inline stats — SRS-required set including live visitor counter */}
+          <div data-hero="stats" className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
             {[
               { Icon: Store, label: 'Markets', value: APP_META.totalMarkets },
               { Icon: BadgeCheck, label: 'Organic farms', value: APP_META.organicFarms },
               { Icon: Leaf, label: 'Produce items', value: `${APP_META.totalProduce}+` },
+              { Icon: Users, label: 'Online now', value: <LiveCounter base={APP_META.liveVisitorsBase} /> },
             ].map(({ Icon, label, value }) => (
               <div key={label} className="bg-white rounded-2xl p-3 sm:p-4 shadow-card">
                 <Icon className="w-4 h-4 text-orange mb-1" />
-                <p className="font-display text-2xl sm:text-3xl text-emerald leading-none">{value}</p>
+                <p className="font-display text-xl sm:text-2xl text-emerald leading-none">{value}</p>
                 <p className="text-[10px] uppercase tracking-widest text-charcoal/60 mt-1">{label}</p>
               </div>
             ))}
@@ -226,6 +258,81 @@ function Highlights() {
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  )
+}
+
+/* ──────────────────────────────────────────────────────────────
+   HORIZONTAL SHOWCASE — scroll-jacking: vertical scroll moves
+   cards horizontally. Truly out-of-the-box effect.
+   ────────────────────────────────────────────────────────────── */
+function HorizontalShowcase() {
+  const root = useRef(null)
+  const trackRef = useRef(null)
+
+  useGSAP(() => {
+    const track = trackRef.current
+    const section = root.current
+    if (!track || !section) return
+
+    const totalScroll = track.scrollWidth - window.innerWidth + 200
+
+    gsap.to(track, {
+      x: -totalScroll,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: () => `+=${totalScroll}`,
+        scrub: 1,
+        pin: true,
+        invalidateOnRefresh: true,
+      },
+    })
+  }, { scope: root })
+
+  // Show all featured markets + a few more in the horizontal track
+  const showcaseMarkets = MARKETS.slice(0, 7)
+
+  return (
+    <section ref={root} className="relative h-screen overflow-hidden bg-emerald">
+      <div className="absolute top-10 left-0 right-0 z-10 text-center pointer-events-none">
+        <span className="eyebrow-ff text-orange-soft">Scroll to explore</span>
+        <h2 className="font-display text-3xl sm:text-5xl text-oatmeal mt-2">
+          Every market, a story.
+        </h2>
+        <p className="text-oatmeal/60 mt-2 text-sm">Keep scrolling — they'll come to you.</p>
+      </div>
+
+      <div ref={trackRef} className="flex gap-8 items-center h-full pl-[10vw] pr-[10vw] pt-32 will-change-transform">
+        {showcaseMarkets.map((m, i) => (
+          <Link
+            key={m.id}
+            to={`/market/${m.id}`}
+            data-hover
+            data-cursor="View"
+            className="relative shrink-0 w-[300px] sm:w-[360px] h-[420px] rounded-3xl overflow-hidden shadow-cardHover group"
+          >
+            <img
+              src={m.image}
+              alt={m.name}
+              loading="lazy"
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              onError={(e) => { e.target.style.display = 'none' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-emerald-deep via-emerald-deep/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-oatmeal">
+              <span className="chip-ff bg-orange text-white mb-2">0{i + 1}</span>
+              <h3 className="font-display text-2xl font-bold leading-tight">{m.name}</h3>
+              <p className="text-oatmeal/70 text-sm mt-1">{m.area} · {m.days.join(', ')}</p>
+              <p className="text-oatmeal/60 text-xs mt-3 line-clamp-2">{m.shortDesc}</p>
+              <div className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-orange-soft group-hover:gap-2 transition-all">
+                View details <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   )
@@ -365,10 +472,10 @@ function StatsBanner() {
   useGsapParallax(root, 0.18)
 
   const stats = [
+    { label: 'Live visitors', value: APP_META.liveVisitorsBase + 60, Icon: Users, suffix: '' },
     { label: 'Total markets', value: APP_META.totalMarkets, Icon: Store, suffix: '' },
     { label: 'Verified organic farms', value: APP_META.organicFarms, Icon: BadgeCheck, suffix: '' },
     { label: 'Produce items tracked', value: APP_META.totalProduce, Icon: Leaf, suffix: '+' },
-    { label: 'Areas covered', value: 10, Icon: MapPin, suffix: '' },
   ]
 
   return (
@@ -396,7 +503,7 @@ function StatsBanner() {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   HOW IT WORKS — 4-step grid with staggered reveal + icon bounce
+   HOW IT WORKS — 4-step grid with 3D flip cards
    ────────────────────────────────────────────────────────────── */
 function HowItWorks() {
   const root = useRef(null)
@@ -418,13 +525,15 @@ function HowItWorks() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {steps.map(({ Icon, title, body }, i) => (
-            <div key={title} data-reveal className="card-ff p-6 hover:shadow-cardHover hover:-translate-y-2 transition-all duration-300 group">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl gradient-emerald text-white mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
-                <Icon className="w-5 h-5" />
+            <div key={title} data-reveal className="[perspective:1000px]">
+              <div className="card-ff p-6 hover:shadow-cardHover transition-all duration-500 group h-full [transform-style:preserve-3d] hover:[transform:rotateY(8deg)_translateZ(20px)]">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl gradient-emerald text-white mb-4 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <p className="text-[10px] uppercase tracking-widest text-orange font-bold">Step {i + 1}</p>
+                <h3 className="font-display text-lg text-emerald mt-1">{title}</h3>
+                <p className="text-sm text-charcoal/70 mt-2 leading-relaxed">{body}</p>
               </div>
-              <p className="text-[10px] uppercase tracking-widest text-orange font-bold">Step {i + 1}</p>
-              <h3 className="font-display text-lg text-emerald mt-1">{title}</h3>
-              <p className="text-sm text-charcoal/70 mt-2 leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -468,6 +577,7 @@ export default function Home() {
     <div className="overflow-hidden">
       <Hero />
       <Highlights />
+      <HorizontalShowcase />
       <Marquee />
       <SeasonalPicks />
       <StatsBanner />

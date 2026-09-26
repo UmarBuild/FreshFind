@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { X, Calendar, MapPin, ShoppingCart, HeartPulse, Snowflake, Store } from 'lucide-react'
 import gsap from 'gsap'
 import { PRODUCE_BY_ID, MARKET_BY_ID } from '../data/dummyData'
 
 export default function ProduceModal({ produceId, onClose }) {
-  const rootRef = useRef(null)
   const panelRef = useRef(null)
   const produce = produceId ? PRODUCE_BY_ID[produceId] : null
 
@@ -16,46 +16,41 @@ export default function ProduceModal({ produceId, onClose }) {
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
 
-    const tl = gsap.timeline()
-    tl.fromTo(rootRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 })
-      .fromTo(panelRef.current,
-        { y: 60, scale: 0.85, opacity: 0, rotateX: -15 },
-        { y: 0, scale: 1, opacity: 1, rotateX: 0, duration: 0.7, ease: 'back.out(1.5)' },
-        '-=0.1'
+    // Simple GSAP entrance — panel scales in
+    if (panelRef.current) {
+      gsap.fromTo(panelRef.current,
+        { y: 40, scale: 0.9, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.4)' }
       )
-      .fromTo(panelRef.current.querySelectorAll('[data-modal-stagger]'),
-        { y: 24, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: 'power3.out' },
-        '-=0.3'
-      )
+    }
 
     return () => {
       document.body.style.overflow = ''
       document.removeEventListener('keydown', onKey)
     }
-  }, [produce, onClose])
+  }, [produceId, onClose])
 
   if (!produce) return null
 
-  const sections = [
-    { icon: HeartPulse, label: 'Nutritional Facts', color: 'text-orange', items: Object.entries(produce.nutrition) },
-  ]
-
-  return (
+  // Use portal to render at document.body level — escapes any stacking context
+  return createPortal(
     <div
-      ref={rootRef}
-      className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4"
-      style={{ visibility: 'hidden' }}
+      className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center p-0 sm:p-4"
       role="dialog"
       aria-modal="true"
+      onClick={onClose}
     >
-      <div className="absolute inset-0 bg-emerald-deep/50 backdrop-blur-md" onClick={onClose} />
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-emerald-deep/60 backdrop-blur-md" />
+
+      {/* Panel */}
       <div
         ref={panelRef}
         className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-oatmeal rounded-t-3xl sm:rounded-3xl shadow-cardHover"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header — real photo with overlay */}
-        <div className="relative h-48 sm:h-56 overflow-hidden">
+        <div className="relative h-48 sm:h-56 overflow-hidden rounded-t-3xl">
           <img
             src={produce.image}
             alt={produce.name}
@@ -64,11 +59,11 @@ export default function ProduceModal({ produceId, onClose }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-emerald-deep via-emerald/40 to-emerald/20" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-7xl drop-shadow-2xl group-hover:scale-110 transition-transform duration-500" aria-hidden>{produce.icon}</span>
+            <span className="text-7xl drop-shadow-2xl">{produce.icon}</span>
           </div>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 inline-flex items-center justify-center w-9 h-9 rounded-full bg-oatmeal/25 text-oatmeal hover:bg-oatmeal/40 backdrop-blur-sm transition-colors"
+            className="absolute top-4 right-4 inline-flex items-center justify-center w-9 h-9 rounded-full bg-oatmeal/25 text-oatmeal hover:bg-oatmeal/40 backdrop-blur-sm transition-colors z-10"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -76,7 +71,7 @@ export default function ProduceModal({ produceId, onClose }) {
         </div>
 
         <div className="p-6 sm:p-8">
-          <div data-modal-stagger>
+          <div>
             <span className="eyebrow-ff">{produce.category}</span>
             <h2 className="font-display text-3xl text-emerald mt-1">{produce.name}</h2>
             <div className="flex flex-wrap gap-1.5 mt-3">
@@ -90,7 +85,7 @@ export default function ProduceModal({ produceId, onClose }) {
           </div>
 
           {/* Nutrition */}
-          <div data-modal-stagger className="mt-6">
+          <div className="mt-6">
             <h3 className="flex items-center gap-2 font-display text-lg text-emerald mb-3">
               <HeartPulse className="w-4 h-4 text-orange" /> Nutritional Facts
               <span className="text-xs font-sans font-normal text-charcoal/50">(per 100g, raw)</span>
@@ -106,7 +101,7 @@ export default function ProduceModal({ produceId, onClose }) {
           </div>
 
           {/* Storage */}
-          <div data-modal-stagger className="mt-6">
+          <div className="mt-6">
             <h3 className="flex items-center gap-2 font-display text-lg text-emerald mb-2">
               <Snowflake className="w-4 h-4 text-orange" /> Storage Tips
             </h3>
@@ -114,7 +109,7 @@ export default function ProduceModal({ produceId, onClose }) {
           </div>
 
           {/* Linked markets */}
-          <div data-modal-stagger className="mt-6">
+          <div className="mt-6">
             <h3 className="flex items-center gap-2 font-display text-lg text-emerald mb-3">
               <Store className="w-4 h-4 text-orange" /> Available at {produce.markets.length} Market{produce.markets.length !== 1 ? 's' : ''}
             </h3>
@@ -144,6 +139,7 @@ export default function ProduceModal({ produceId, onClose }) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

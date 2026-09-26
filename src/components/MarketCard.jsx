@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Bookmark, MapPin, Clock, Star, ChevronRight, BadgeCheck } from 'lucide-react'
 import { useBookmarks } from '../context/BookmarkContext'
 import StatusBadge from './StatusBadge'
+import { useTilt3D } from '../hooks/useTilt3D'
 
 // Real photo thumbnail with gradient overlay + shine sweep on hover
 function Thumbnail({ market }) {
@@ -65,12 +66,16 @@ export default function MarketCard({ market, style }) {
   const { isBookmarked, toggleBookmark } = useBookmarks()
   const saved = isBookmarked('market', market.id)
 
+  // 3D mouse-follow tilt — out-of-the-box card depth
+  useTilt3D(ref, { max: 8, scale: 1.02, speed: 0.5 })
+
   return (
     <article
       ref={ref}
-      className="card-ff overflow-hidden hover:shadow-cardHover hover:-translate-y-2 group flex flex-col transition-all duration-500"
+      className="card-ff overflow-hidden hover:shadow-cardHover group flex flex-col transition-shadow duration-500 [transform-style:preserve-3d]"
       style={style}
       data-hover
+      data-cursor="View"
     >
       <div className="relative overflow-hidden">
         <Thumbnail market={market} />

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { X, Mail, Lock, User, Sprout, Loader2, CheckCircle2 } from 'lucide-react'
 import gsap from 'gsap'
 import { useAuth } from '../context/AuthContext'
@@ -19,7 +20,7 @@ export default function AuthModal() {
     setForm({ name: '', email: '', password: '' })
 
     const tl = gsap.timeline()
-    tl.fromTo(rootRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, ease: 'power2.out' })
+    tl.fromTo(rootRef.current, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' })
       .fromTo(panelRef.current, { y: 24, scale: 0.96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' }, '-=0.1')
 
     document.body.style.overflow = 'hidden'
@@ -49,11 +50,10 @@ export default function AuthModal() {
     }, 1100)
   }
 
-  return (
+  return createPortal(
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
-      style={{ visibility: 'hidden' }}
+      className="fixed inset-0 z-[90] flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
     >
@@ -183,6 +183,7 @@ export default function AuthModal() {
           </p>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
